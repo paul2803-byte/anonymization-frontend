@@ -1,0 +1,8 @@
+{
+    "/api": {
+        "target": "https://anonymizer.go-data.at",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    }
+}

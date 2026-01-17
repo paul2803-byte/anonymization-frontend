@@ -1,0 +1,139 @@
+.further-info-container {
+    margin-top: 3rem;
+    width: 100%;
+}
+
+.section-title {
+    color: #333333;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.accordion {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: none;
+}
+
+.accordion-item {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.accordion-item:last-child {
+    border-bottom: none;
+}
+
+.accordion-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: #f9f9f9;
+    border: none;
+    color: #333333;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.accordion-header:hover {
+    background: #f0f0f0;
+    color: #333333;
+}
+
+.accordion-header.active {
+    background: #eef7e9;
+    /* Light green tint for active */
+    color: #3c763d;
+}
+
+.chevron {
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+    opacity: 0.6;
+    color: #777777;
+}
+
+.chevron.open {
+    transform: rotate(180deg);
+    color: #3c763d;
+}
+
+.accordion-header:hover .chevron,
+.accordion-header.active .chevron {
+    opacity: 1;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #ffffff;
+}
+
+.accordion-content.open {
+    max-height: 3000px;
+    /* Increased to ensure enough space */
+    transition: max-height 0.5s ease-in-out;
+}
+
+.content-inner {
+    padding: 1.5rem;
+    color: #555555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Styles for injected HTML content */
+.content-inner ::ng-deep a {
+    color: #337ab7;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.content-inner ::ng-deep a:hover {
+    text-decoration: underline;
+    color: #23527c;
+}
+
+.content-inner ::ng-deep code {
+    background: #f5f5f5;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 0.9em;
+    color: #c7254e;
+    border: 1px solid #e1e1e8;
+}
+
+.content-inner ::ng-deep pre {
+    background: #f5f5f5;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 0.9em;
+    color: #333333;
+    border: 1px solid #e1e1e8;
+    white-space: pre-wrap;
+}
+
+.content-inner ::ng-deep ul,
+.content-inner ::ng-deep ol {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.content-inner ::ng-deep li {
+    margin-bottom: 0.5rem;
+}

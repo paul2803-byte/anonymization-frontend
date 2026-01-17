@@ -1,0 +1,201 @@
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+}
+
+.header {
+    padding: 1.5rem 0;
+    background-color: #f1f3f9;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 2rem;
+}
+
+.header-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo h1 {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #333333;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.logo h1 sup {
+    font-size: 60%;
+    vertical-align: baseline;
+    position: relative;
+    top: -0.9em;
+    font-weight: 400;
+}
+
+.subtitle {
+    display: none;
+    /* Hiding subtitle for cleaner look, or can be kept if preferred */
+}
+
+/* OwnYourData Button */
+.oyd-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #337ab7;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+}
+
+.oyd-link:hover {
+    color: #23527c;
+    border-color: #337ab7;
+    background-color: #f8f9fa;
+}
+
+.oyd-link svg {
+    width: 16px;
+    height: 16px;
+}
+
+.main-content {
+    flex: 1;
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.card {
+    width: 100%;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    overflow: visible;
+}
+
+.tabs {
+    display: flex;
+    background: transparent;
+    padding: 0;
+    gap: 2rem;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.tab-btn {
+    padding: 0.75rem 0.5rem;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #777777;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 0;
+    /* Clear previous radius */
+}
+
+.tab-btn:hover {
+    color: #333333;
+    background: transparent;
+}
+
+.tab-btn.active {
+    color: #333333;
+    border-bottom-color: #337ab7;
+    /* Standard academic blue for selection */
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Remove gradient active states */
+.tab-btn:first-child.active,
+.tab-btn:last-child.active {
+    background: transparent;
+}
+
+.tab-icon {
+    display: none;
+    /* Hide icons for cleaner text-only tabs */
+}
+
+.tab-content {
+    padding: 0;
+    width: 100%;
+}
+
+.footer {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-top: 1px solid #e5e5e5;
+    background-color: #fafafa;
+    margin-top: auto;
+}
+
+.footer-funding {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto 1.5rem auto;
+    padding: 0 1rem;
+}
+
+.funding-logo {
+    height: 120px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.funding-text {
+    color: #555555;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    text-align: left;
+    margin: 0;
+}
+
+.powered-by {
+    color: #777777;
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.footer a {
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+    color: #23527c;
+}

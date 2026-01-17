@@ -1,0 +1,84 @@
+/* Import Open Sans */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #ffffff;
+    min-height: 100vh;
+    color: #333333;
+    line-height: 1.6;
+}
+
+/* Scrollbar styling - simpler for academic look */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Selection styling */
+::selection {
+    background: rgba(92, 184, 92, 0.3);
+    /* Green tint */
+    color: #333333;
+}
+
+/* Focus visible styling for accessibility */
+:focus-visible {
+    outline: 2px solid #5cb85c;
+    /* Bootstrap Success Green */
+    outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Button reset */
+button {
+    font-family: inherit;
+}
+
+/* Input reset */
+input,
+textarea {
+    font-family: inherit;
+}
+
+/* Link reset */
+a {
+    color: #337ab7;
+    /* Classic link blue */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

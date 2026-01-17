@@ -1,0 +1,202 @@
+{
+  "configurationUrl": "https://soya.ownyourdata.eu/AnonymisationDemo",
+  "data": {
+    "@context": {
+      "oyd": "https://soya.ownyourdata.eu/AnonymisationDemo/"
+    },
+    "@graph": [
+      {
+        "@id": "oyd:test1",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address1"
+        }
+      },
+      {
+        "@id": "oyd:address1",
+        "@type": "oyd:Address",
+        "oyd:detail": "Musterstrasse 1",
+        "oyd:city": "Vienna",
+        "oyd:zip": "1010",
+        "oyd:state": "Vienna",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test2",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address2"
+        }
+      },
+      {
+        "@id": "oyd:address2",
+        "@type": "oyd:Address",
+        "oyd:detail": "Anderestrasse 1",
+        "oyd:city": "Vienna",
+        "oyd:zip": "1010",
+        "oyd:state": "Vienna",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test3",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address3"
+        }
+      },
+      {
+        "@id": "oyd:address3",
+        "@type": "oyd:Address",
+        "oyd:detail": "Hauptplatz 1",
+        "oyd:city": "Vienna",
+        "oyd:zip": "1050",
+        "oyd:state": "Vienna",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test4",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address4"
+        }
+      },
+      {
+        "@id": "oyd:address4",
+        "@type": "oyd:Address",
+        "oyd:detail": "Meidlingergasse 7",
+        "oyd:city": "Vienna",
+        "oyd:zip": "1140",
+        "oyd:state": "Vienna",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test5",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address5"
+        }
+      },
+      {
+        "@id": "oyd:address5",
+        "@type": "oyd:Address",
+        "oyd:detail": "Musterstrasse 6",
+        "oyd:city": "Vienna",
+        "oyd:zip": "1110",
+        "oyd:state": "Vienna",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test6",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address6"
+        }
+      },
+      {
+        "@id": "oyd:address6",
+        "@type": "oyd:Address",
+        "oyd:detail": "Willhelmweg 1",
+        "oyd:city": "Vienna",
+        "oyd:zip": "1220",
+        "oyd:state": "Vienna",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test7",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address7"
+        }
+      },
+      {
+        "@id": "oyd:address7",
+        "@type": "oyd:Address",
+        "oyd:detail": "Hauptplatz 11",
+        "oyd:city": "Vienna",
+        "oyd:zip": "1050",
+        "oyd:state": "Vienna",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test8",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address8"
+        }
+      },
+      {
+        "@id": "oyd:address8",
+        "@type": "oyd:Address",
+        "oyd:detail": "Bahnhofstrasse 3",
+        "oyd:city": "Saalfelden",
+        "oyd:zip": "5050",
+        "oyd:state": "Salzburg",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test9",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address9"
+        }
+      },
+      {
+        "@id": "oyd:address9",
+        "@type": "oyd:Address",
+        "oyd:detail": "Vogerlweg 5",
+        "oyd:city": "St Johann im Pongau",
+        "oyd:zip": "5031",
+        "oyd:state": "Salzburg",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test10",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address10"
+        }
+      },
+      {
+        "@id": "oyd:address10",
+        "@type": "oyd:Address",
+        "oyd:detail": "Hauptstrasse 10",
+        "oyd:city": "Salzburg",
+        "oyd:zip": "5020",
+        "oyd:state": "Salzburg",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test11",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address11"
+        }
+      },
+      {
+        "@id": "oyd:address11",
+        "@type": "oyd:Address",
+        "oyd:detail": "Hauptstrasse 9",
+        "oyd:city": "Salzburg",
+        "oyd:zip": "5020",
+        "oyd:state": "Salzburg",
+        "oyd:country": "Austria"
+      },
+      {
+        "@id": "oyd:test12",
+        "@type": "oyd:AnonymisationDemo",
+        "oyd:adresse": {
+          "@id": "oyd:address12"
+        }
+      },
+      {
+        "@id": "oyd:address12",
+        "@type": "oyd:Address",
+        "oyd:detail": "Schlossallee 14",
+        "oyd:city": "Salzburg",
+        "oyd:zip": "5020",
+        "oyd:state": "Salzburg",
+        "oyd:country": "Austria"
+      }
+    ]
+  }
+}

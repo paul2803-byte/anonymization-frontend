@@ -1,0 +1,83 @@
+<div class="form-container">
+  <div class="example-selection">
+    <label>Load Example:</label>
+    <div class="example-controls">
+      <select class="example-select input-field" [(ngModel)]="selectedExample" (change)="onExampleChange()">
+        <option [ngValue]="null">-- Select an example --</option>
+        <option *ngFor="let ex of examples" [ngValue]="ex">{{ ex.label }}</option>
+      </select>
+      <button type="button" class="revert-btn" (click)="revert()" [disabled]="!selectedExample"
+        title="Revert to example values">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+        </svg>
+        Revert
+      </button>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <app-config-url-input [(value)]="configurationUrl"></app-config-url-input>
+
+    <div class="toggle-group">
+      <div class="toggle-item">
+        <label class="toggle-label">
+          <span>Calculate KPI</span>
+          <input type="checkbox" [(ngModel)]="calculateKpi" class="toggle-checkbox" />
+          <span class="toggle-switch"></span>
+        </label>
+      </div>
+      <div class="toggle-item">
+        <label class="toggle-label">
+          <span>Include Original Data</span>
+          <input type="checkbox" [(ngModel)]="includeOriginalData" class="toggle-checkbox" />
+          <span class="toggle-switch"></span>
+        </label>
+      </div>
+    </div>
+    <label for="jsonFile">JSON-LD Data</label>
+    <div class="file-upload-wrapper">
+      <input type="file" id="jsonFile" accept=".json" (change)="onFileSelected($event)" class="file-input" />
+      <label for="jsonFile" class="file-upload-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="17 8 12 3 7 8" />
+          <line x1="12" y1="3" x2="12" y2="15" />
+        </svg>
+        Upload JSON File
+      </label>
+    </div>
+    <textarea [(ngModel)]="jsonData" placeholder='{"@context": {...}, "@graph": [...]}' class="textarea-field"
+      rows="8"></textarea>
+  </div>
+
+
+
+  <button (click)="anonymize()" [disabled]="isLoading" class="submit-btn">
+    <span *ngIf="!isLoading">Anonymize</span>
+    <span *ngIf="isLoading" class="loading-spinner"></span>
+  </button>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div *ngIf="result" class="result-container">
+    <div class="result-header">
+      <h3>Result</h3>
+      <button (click)="downloadResult()" class="download-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        Download JSON
+      </button>
+    </div>
+    <pre class="result-output">{{ result }}</pre>
+  </div>
+</div>

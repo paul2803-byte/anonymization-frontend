@@ -1,0 +1,15 @@
+<div class="form-group">
+    <label for="configUrl">Configuration URL</label>
+    <div class="input-actions-wrapper">
+        <input type="text" id="configUrl" [ngModel]="value" (ngModelChange)="onValueChange($event)"
+            placeholder="https://soya.ownyourdata.eu/AnonymisationDemo" class="input-field" />
+        <div class="actions">
+            <button class="action-btn" (click)="createNewConfig()" title="Create new config">
+                Create new config
+            </button>
+            <button *ngIf="value" class="action-btn" (click)="viewConfig()" title="View config">
+                View config
+            </button>
+        </div>
+    </div>
+</div>

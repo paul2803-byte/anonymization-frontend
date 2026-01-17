@@ -1,0 +1,53 @@
+<div class="app-container">
+  <header class="header">
+    <div class="header-content">
+      <a href="/" class="logo">
+        <img src="assets/images/oyd.png" alt="OwnYourData Logo" width="48" height="48">
+        <h1>Anonymizer<sup>Beta</sup></h1>
+      </a>
+      <p class="subtitle">Privacy-preserving data transformation</p>
+      <a href="https://www.ownyourdata.eu/en/" target="_blank" rel="noopener" class="oyd-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path
+            d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z" />
+          <path d="m8 3.293 6 6V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V9.293l6-6Z" />
+        </svg>
+        OwnYourData
+      </a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="card">
+      <nav class="tabs">
+        <button class="tab-btn" [class.active]="activeTab === 'json-ld'" (click)="setActiveTab('json-ld')">
+          <span class="tab-icon json-ld-icon"></span>
+          JSON-LD
+        </button>
+        <button class="tab-btn" [class.active]="activeTab === 'flat-json'" (click)="setActiveTab('flat-json')">
+          <span class="tab-icon flat-json-icon"></span>
+          Flat JSON
+        </button>
+      </nav>
+
+      <div class="tab-content">
+        <app-json-ld-form *ngIf="activeTab === 'json-ld'"></app-json-ld-form>
+        <app-flat-json-form *ngIf="activeTab === 'flat-json'"></app-flat-json-form>
+      </div>
+    </div>
+    <app-further-info></app-further-info>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-funding">
+      <p class="funding-text">
+        This project has received funding from the Austrian Federal Ministry for Climate Action, Environment, Energy,
+        Mobility, Innovation and Technology (BMK) and the Austrian Research Promotion Agency (FFG) under
+        <a href="https://projekte.ffg.at/projekt/4861627" target="_blank" rel="noopener">grant number 905128</a>.
+      </p>
+      <img src="assets/images/bmk_ffg.png" alt="BMK and FFG Logo" class="funding-logo">
+    </div>
+    <p class="powered-by">Powered by <a href="https://anonymizer.go-data.at/swagger-ui/index.html" target="_blank"
+        rel="noopener">go-data.at Anonymization API</a></p>
+  </footer>
+</div>
