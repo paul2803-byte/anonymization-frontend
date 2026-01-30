@@ -7,6 +7,7 @@ export interface JsonLdRequest {
   data: object;
   calculateKpi?: boolean;
   includeOriginalData?: boolean;
+  useAdjustedAttributes?: boolean;
 }
 
 export interface FlatJsonRequest {
@@ -15,6 +16,7 @@ export interface FlatJsonRequest {
   data: any[];
   calculateKpi?: boolean;
   includeOriginalData?: boolean;
+  useAdjustedAttributes?: boolean;
 }
 
 @Injectable({

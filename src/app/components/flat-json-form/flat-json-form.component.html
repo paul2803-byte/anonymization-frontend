@@ -35,10 +35,21 @@
                     <span class="toggle-switch"></span>
                 </label>
             </div>
-            <div class="toggle-item">
+            <div class="toggle-item" [class.disabled]="!useAdjustedAttributes"
+                [title]="!useAdjustedAttributes ? 'Cannot enable when Use Suffix is disabled' : ''">
                 <label class="toggle-label">
                     <span>Include Original Data</span>
-                    <input type="checkbox" [(ngModel)]="includeOriginalData" class="toggle-checkbox" />
+                    <input type="checkbox" [(ngModel)]="includeOriginalData" class="toggle-checkbox"
+                        [disabled]="!useAdjustedAttributes" />
+                    <span class="toggle-switch"></span>
+                </label>
+            </div>
+            <div class="toggle-item" [class.disabled]="includeOriginalData"
+                [title]="includeOriginalData ? 'Cannot disable when Include Original Data is enabled' : ''">
+                <label class="toggle-label">
+                    <span>Use Suffix</span>
+                    <input type="checkbox" [(ngModel)]="useAdjustedAttributes" class="toggle-checkbox"
+                        [disabled]="includeOriginalData" />
                     <span class="toggle-switch"></span>
                 </label>
             </div>

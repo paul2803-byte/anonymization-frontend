@@ -20,6 +20,7 @@ export class FlatJsonFormComponent {
   jsonData = '';
   calculateKpi = true;
   includeOriginalData = false;
+  useAdjustedAttributes = true;
   isLoading = false;
   error = '';
   result = '';
@@ -71,6 +72,7 @@ export class FlatJsonFormComponent {
     this.jsonData = '';
     this.calculateKpi = true;
     this.includeOriginalData = false;
+    this.useAdjustedAttributes = true;
     this.selectedExample = null;
     this.result = '';
     this.error = '';
@@ -107,12 +109,22 @@ export class FlatJsonFormComponent {
     if (fullExample.includeOriginalData !== undefined) {
       this.includeOriginalData = fullExample.includeOriginalData;
     }
+    if (fullExample.useAdjustedAttributes !== undefined) {
+      this.useAdjustedAttributes = fullExample.useAdjustedAttributes;
+    } else {
+      this.useAdjustedAttributes = true;
+    }
     this.calculateKpi = true;
   }
 
   async anonymize(): Promise<void> {
     if (!this.configurationUrl || !this.prefix || !this.jsonData) {
       this.error = 'Please provide Configuration URL, Prefix, and JSON data';
+      return;
+    }
+
+    if (!this.useAdjustedAttributes && this.includeOriginalData) {
+      this.error = 'Invalid combination: "Use Suffix" must be enabled when "Include Original Data" is enabled';
       return;
     }
 
@@ -137,7 +149,8 @@ export class FlatJsonFormComponent {
       prefix: this.prefix,
       data: parsedData,
       calculateKpi: this.calculateKpi,
-      includeOriginalData: this.includeOriginalData
+      includeOriginalData: this.includeOriginalData,
+      useAdjustedAttributes: this.useAdjustedAttributes
     };
 
     this.anonymizationService.anonymizeFlatJson(request).subscribe({

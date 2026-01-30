@@ -330,3 +330,16 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.toggle-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.toggle-item.disabled .toggle-label {
+    cursor: not-allowed;
+}
+
+.toggle-item.disabled .toggle-switch {
+    cursor: not-allowed;
+}
