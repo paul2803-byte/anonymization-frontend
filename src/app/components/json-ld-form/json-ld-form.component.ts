@@ -19,6 +19,7 @@ export class JsonLdFormComponent {
   jsonData = '';
   calculateKpi = true;
   includeOriginalData = false;
+  useAdjustedAttributes = true;
   isLoading = false;
   error = '';
   result = '';
@@ -69,6 +70,7 @@ export class JsonLdFormComponent {
     this.jsonData = '';
     this.calculateKpi = true;
     this.includeOriginalData = false;
+    this.useAdjustedAttributes = true;
     this.selectedExample = null;
     this.result = '';
     this.error = '';
@@ -101,6 +103,11 @@ export class JsonLdFormComponent {
     if (fullExample.includeOriginalData !== undefined) {
       this.includeOriginalData = fullExample.includeOriginalData;
     }
+    if (fullExample.useAdjustedAttributes !== undefined) {
+      this.useAdjustedAttributes = fullExample.useAdjustedAttributes;
+    } else {
+      this.useAdjustedAttributes = true;
+    }
     // Reset KPI to default
     this.calculateKpi = true;
   }
@@ -108,6 +115,11 @@ export class JsonLdFormComponent {
   async anonymize(): Promise<void> {
     if (!this.configurationUrl || !this.jsonData) {
       this.error = 'Please provide both Configuration URL and JSON-LD data';
+      return;
+    }
+
+    if (!this.useAdjustedAttributes && this.includeOriginalData) {
+      this.error = 'Invalid combination: "Use Suffix" must be enabled when "Include Original Data" is enabled';
       return;
     }
 
@@ -127,7 +139,8 @@ export class JsonLdFormComponent {
       configurationUrl: this.configurationUrl,
       data: parsedData,
       calculateKpi: this.calculateKpi,
-      includeOriginalData: this.includeOriginalData
+      includeOriginalData: this.includeOriginalData,
+      useAdjustedAttributes: this.useAdjustedAttributes
     };
 
     this.anonymizationService.anonymizeJsonLD(request).subscribe({
