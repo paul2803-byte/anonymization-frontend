@@ -1,0 +1,98 @@
+.kpi-container {
+    margin-bottom: 1.5rem;
+    background: #f9fdf9;
+    border: 1px solid #d6e9c6;
+    border-left: 3px solid #5cb85c;
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+}
+
+.kpi-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.kpi-header svg {
+    color: #3c763d;
+}
+
+.kpi-header h3 {
+    font-size: 1rem;
+    color: #3c763d;
+    margin: 0;
+    font-weight: 600;
+}
+
+.kpi-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.kpi-main {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.kpi-main .label {
+    color: #555;
+    font-weight: 500;
+}
+
+.kpi-main .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3c763d;
+}
+
+.kpi-divider {
+    width: 1px;
+    background: #d6e9c6;
+    align-self: stretch;
+    min-height: 40px;
+}
+
+.attribute-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.attribute-name {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.attribute-row {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.attribute-row .label {
+    color: #777;
+}
+
+.attribute-row .value {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 500px) {
+    .kpi-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .kpi-divider {
+        display: none;
+    }
+}

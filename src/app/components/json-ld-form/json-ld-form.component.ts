@@ -4,11 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AnonymizationService, JsonLdRequest } from '../../services/anonymization.service';
 import { ConfigUrlInputComponent } from '../config-url-input/config-url-input.component';
+import { KpiDisplayComponent } from '../kpi-display/kpi-display.component';
+import { KpiData, extractKpis, filterDataEntries } from '../../utils/kpi-extractor.util';
 
 @Component({
   selector: 'app-json-ld-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfigUrlInputComponent],
+  imports: [CommonModule, FormsModule, ConfigUrlInputComponent, KpiDisplayComponent],
   templateUrl: './json-ld-form.component.html',
   styleUrls: ['./json-ld-form.component.css']
 })
@@ -23,6 +25,7 @@ export class JsonLdFormComponent {
   isLoading = false;
   error = '';
   result = '';
+  kpiData: KpiData | null = null;
 
   selectedExample: any = null;
 
@@ -70,6 +73,7 @@ export class JsonLdFormComponent {
     this.jsonData = '';
     this.calculateKpi = true;
     this.includeOriginalData = false;
+    this.kpiData = null;
     this.useAdjustedAttributes = true;
     this.selectedExample = null;
     this.result = '';
@@ -134,6 +138,7 @@ export class JsonLdFormComponent {
     this.isLoading = true;
     this.error = '';
     this.result = '';
+    this.kpiData = null;
 
     const request: JsonLdRequest = {
       configurationUrl: this.configurationUrl,
@@ -145,6 +150,12 @@ export class JsonLdFormComponent {
 
     this.anonymizationService.anonymizeJsonLD(request).subscribe({
       next: (response) => {
+        // Extract KPIs if calculateKpi was enabled
+        if (this.calculateKpi) {
+          this.kpiData = extractKpis(response);
+        }
+
+        // Store full response for display and download
         this.result = JSON.stringify(response, null, 2);
         this.resultChange.emit(this.result);
         this.isLoading = false;

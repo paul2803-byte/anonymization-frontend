@@ -4,11 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AnonymizationService, FlatJsonRequest } from '../../services/anonymization.service';
 import { ConfigUrlInputComponent } from '../config-url-input/config-url-input.component';
+import { KpiDisplayComponent } from '../kpi-display/kpi-display.component';
+import { KpiData, extractFlatJsonKpis, filterFlatJsonData } from '../../utils/kpi-extractor.util';
 
 @Component({
   selector: 'app-flat-json-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfigUrlInputComponent],
+  imports: [CommonModule, FormsModule, ConfigUrlInputComponent, KpiDisplayComponent],
   templateUrl: './flat-json-form.component.html',
   styleUrls: ['./flat-json-form.component.css']
 })
@@ -24,6 +26,7 @@ export class FlatJsonFormComponent {
   isLoading = false;
   error = '';
   result = '';
+  kpiData: KpiData | null = null;
 
   selectedExample: any = null;
 
@@ -73,6 +76,7 @@ export class FlatJsonFormComponent {
     this.calculateKpi = true;
     this.includeOriginalData = false;
     this.useAdjustedAttributes = true;
+    this.kpiData = null;
     this.selectedExample = null;
     this.result = '';
     this.error = '';
@@ -143,6 +147,7 @@ export class FlatJsonFormComponent {
     this.isLoading = true;
     this.error = '';
     this.result = '';
+    this.kpiData = null;
 
     const request: FlatJsonRequest = {
       configurationUrl: this.configurationUrl,
@@ -155,7 +160,13 @@ export class FlatJsonFormComponent {
 
     this.anonymizationService.anonymizeFlatJson(request).subscribe({
       next: (response) => {
-        this.result = JSON.stringify(response, null, 2);
+        // Extract KPIs if calculateKpi is enabled
+        if (this.calculateKpi) {
+          this.kpiData = extractFlatJsonKpis(response);
+        }
+        // Filter and display only the data portion for the result output
+        const dataOnly = filterFlatJsonData(response);
+        this.result = JSON.stringify(dataOnly, null, 2);
         this.resultChange.emit(this.result);
         this.isLoading = false;
       },

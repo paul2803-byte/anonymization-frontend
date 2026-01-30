@@ -77,6 +77,9 @@
   </div>
 
   <div *ngIf="result" class="result-container">
+    <!-- KPI Display Section -->
+    <app-kpi-display *ngIf="kpiData" [kpiData]="kpiData"></app-kpi-display>
+
     <div class="result-header">
       <h3>Result</h3>
       <button (click)="downloadResult()" class="download-btn">
