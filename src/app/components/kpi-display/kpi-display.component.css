@@ -85,6 +85,45 @@
     font-weight: 500;
 }
 
+/* Object type header for multiple KPI objects */
+.kpi-object-header {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.object-type-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #5cb85c;
+    background: #e8f5e9;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+/* Separator between multiple KPI objects */
+.kpi-object-separator {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #d6e9c6, transparent);
+    margin: 1rem 0;
+}
+
+/* Severity color coding based on k-anonymity value */
+/* Good (k > 4) - default green */
+.severity-good .kpi-main .value {
+    color: #3c763d;
+}
+
+/* Warning (k <= 4) - orange */
+.severity-warning .kpi-main .value {
+    color: #e67e22;
+}
+
+/* Critical (k <= 1) - red */
+.severity-critical .kpi-main .value {
+    color: #c0392b;
+}
+
 /* Responsive: stack on small screens */
 @media (max-width: 500px) {
     .kpi-content {

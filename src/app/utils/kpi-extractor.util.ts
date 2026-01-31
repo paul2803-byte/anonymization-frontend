@@ -1,6 +1,8 @@
 /**
  * KPI Extraction Utility for JSON-LD Responses
  * Extracts KPI/benchmark values from anonymization service responses
+ * Supports multiple KPI objects for different object types
+ * Schema pattern: 'http://ns.ownyourdata.eu/ns/soya-context/kpi{{ Object Type }}'
  */
 
 export interface AttributeKpi {
@@ -10,81 +12,114 @@ export interface AttributeKpi {
     nrBucketsUsed: number | null;
 }
 
-export interface KpiData {
+/** KPI data with object type information for multiple KPI objects */
+export interface MultiKpiData {
+    objectType: string;
     kAnonymity: number;
     attributes: AttributeKpi[];
 }
 
+const KPI_URL_PREFIX = 'http://ns.ownyourdata.eu/ns/soya-context/kpi';
+
 /**
- * Extracts KPI data from a JSON-LD response
- * @param response The JSON-LD response object containing @graph array
- * @returns KpiData object or null if no KPIs found
+ * Extracts the object type from a KPI @id
+ * e.g., 'http://ns.ownyourdata.eu/ns/soya-context/kpiPerson' -> 'Person'
  */
-export function extractKpis(response: any): KpiData | null {
+function extractObjectType(kpiId: string): string {
+    if (!kpiId || typeof kpiId !== 'string') {
+        return 'Unknown';
+    }
+    // Extract the part after 'kpi' in the URL
+    const kpiIndex = kpiId.lastIndexOf('/kpi');
+    if (kpiIndex === -1) {
+        return 'Unknown';
+    }
+    const typePart = kpiId.substring(kpiIndex + 4); // +4 to skip '/kpi'
+    return typePart || 'Unknown';
+}
+
+/**
+ * Extracts all KPI data from a JSON-LD response
+ * Supports multiple KPI objects for different object types
+ * @param response The JSON-LD response object containing @graph array
+ * @returns Array of MultiKpiData objects or null if no KPIs found
+ */
+export function extractAllKpis(response: any): MultiKpiData[] | null {
     if (!response || !response['@graph'] || !Array.isArray(response['@graph'])) {
         return null;
     }
 
     const graph = response['@graph'];
 
-    // Find KPI entry - look for @id containing the soya-context KPI pattern
-    const kpiEntry = graph.find((item: any) => {
+    // Find all KPI entries - look for @id containing the soya-context KPI pattern
+    const kpiEntries = graph.filter((item: any) => {
         const id = item['@id'];
         return id && typeof id === 'string' &&
             id.includes('ns.ownyourdata.eu/ns/soya-context/kpi');
     });
 
-    if (!kpiEntry) {
+    if (kpiEntries.length === 0) {
         return null;
     }
 
-    // Extract k-anonymity value
-    const kanonymityObj = kpiEntry['http://ns.ownyourdata.eu/ns/soya-context/kanonymity'];
-    let kAnonymity = 0;
-    if (kanonymityObj) {
-        if (typeof kanonymityObj === 'object' && kanonymityObj['@value']) {
-            kAnonymity = parseInt(kanonymityObj['@value'], 10);
-        } else if (typeof kanonymityObj === 'number') {
-            kAnonymity = kanonymityObj;
-        } else if (typeof kanonymityObj === 'string') {
-            kAnonymity = parseInt(kanonymityObj, 10);
-        }
-    }
+    const results: MultiKpiData[] = [];
 
-    // Extract attributes referenced by the KPI entry
-    const attributes: AttributeKpi[] = [];
-    const hasAttribute = kpiEntry['http://ns.ownyourdata.eu/ns/soya-context/hasAttribute'];
+    for (const kpiEntry of kpiEntries) {
+        const objectType = extractObjectType(kpiEntry['@id']);
 
-    if (hasAttribute) {
-        // Can be single object or array
-        const attributeRefs = Array.isArray(hasAttribute) ? hasAttribute : [hasAttribute];
-
-        for (const attrRef of attributeRefs) {
-            const attrId = attrRef['@id'] || attrRef;
-
-            // Find the attribute in the graph
-            const attrEntry = graph.find((item: any) => item['@id'] === attrId);
-
-            if (attrEntry) {
-                const attribute = extractAttributeKpi(attrEntry, attrId);
-                attributes.push(attribute);
-            } else {
-                // Attribute not found in graph, create basic entry
-                attributes.push({
-                    name: attrId,
-                    displayName: formatAttributeName(attrId),
-                    anonymizationType: 'unknown',
-                    nrBucketsUsed: null
-                });
+        // Extract k-anonymity value
+        const kanonymityObj = kpiEntry['http://ns.ownyourdata.eu/ns/soya-context/kanonymity'];
+        let kAnonymity = 0;
+        if (kanonymityObj) {
+            if (typeof kanonymityObj === 'object' && kanonymityObj['@value']) {
+                kAnonymity = parseInt(kanonymityObj['@value'], 10);
+            } else if (typeof kanonymityObj === 'number') {
+                kAnonymity = kanonymityObj;
+            } else if (typeof kanonymityObj === 'string') {
+                kAnonymity = parseInt(kanonymityObj, 10);
             }
         }
+
+        // Extract attributes referenced by the KPI entry
+        const attributes: AttributeKpi[] = [];
+        const hasAttribute = kpiEntry['http://ns.ownyourdata.eu/ns/soya-context/hasAttribute'];
+
+        if (hasAttribute) {
+            // Can be single object or array
+            const attributeRefs = Array.isArray(hasAttribute) ? hasAttribute : [hasAttribute];
+
+            for (const attrRef of attributeRefs) {
+                const attrId = attrRef['@id'] || attrRef;
+
+                // Find the attribute in the graph
+                const attrEntry = graph.find((item: any) => item['@id'] === attrId);
+
+                if (attrEntry) {
+                    const attribute = extractAttributeKpi(attrEntry, attrId);
+                    attributes.push(attribute);
+                } else {
+                    // Attribute not found in graph, create basic entry
+                    attributes.push({
+                        name: attrId,
+                        displayName: formatAttributeName(attrId),
+                        anonymizationType: 'unknown',
+                        nrBucketsUsed: null
+                    });
+                }
+            }
+        }
+
+        results.push({
+            objectType,
+            kAnonymity,
+            attributes
+        });
     }
 
-    return {
-        kAnonymity,
-        attributes
-    };
+    return results.length > 0 ? results : null;
 }
+
+
 
 /**
  * Extracts KPI information from an attribute entry
@@ -145,68 +180,80 @@ function formatAttributeName(attrId: string): string {
  * Returns only the actual data entries
  */
 /**
- * Extracts KPI data from a flat-JSON response
+ * Extracts all KPI data from a flat-JSON response
  * Flat-JSON responses have KPI data in a 'kpis' object at the root level
- * Structure: { data: [], kpis: { kpiName: { "k-Anonymity": number, attrName: { anonymization, nrBuckets } } } }
+ * Structure: { data: [], kpis: { kpi{{ ObjectType }}: { "k-Anonymity": number, attrName: { anonymization, nrBuckets } } } }
+ * Supports multiple KPI objects for different object types
  * @param response The flat-JSON response object containing 'data' array and 'kpis' object
- * @returns KpiData object or null if no KPIs found
+ * @returns Array of MultiKpiData objects or null if no KPIs found
  */
-export function extractFlatJsonKpis(response: any): KpiData | null {
+export function extractAllFlatJsonKpis(response: any): MultiKpiData[] | null {
     if (!response || !response.kpis) {
         return null;
     }
 
     const kpis = response.kpis;
-
-    // Get the first KPI entry (e.g., kpiAnonymisationDemo)
     const kpiKeys = Object.keys(kpis);
     if (kpiKeys.length === 0) {
         return null;
     }
 
-    const kpiEntry = kpis[kpiKeys[0]];
-    if (!kpiEntry) {
-        return null;
-    }
+    const results: MultiKpiData[] = [];
 
-    // Extract k-anonymity value
-    let kAnonymity = 0;
-    if (kpiEntry['k-Anonymity'] !== undefined) {
-        kAnonymity = typeof kpiEntry['k-Anonymity'] === 'number'
-            ? kpiEntry['k-Anonymity']
-            : parseInt(kpiEntry['k-Anonymity'], 10);
-    }
-
-    // Extract attributes - all other properties except k-Anonymity are attribute KPIs
-    const attributes: AttributeKpi[] = [];
-
-    for (const key of Object.keys(kpiEntry)) {
-        if (key === 'k-Anonymity') {
-            continue; // Skip the k-Anonymity key
+    for (const kpiKey of kpiKeys) {
+        const kpiEntry = kpis[kpiKey];
+        if (!kpiEntry) {
+            continue;
         }
 
-        const attrData = kpiEntry[key];
-        if (attrData && typeof attrData === 'object') {
-            const attribute: AttributeKpi = {
-                name: key,
-                displayName: formatAttributeName(key),
-                anonymizationType: attrData.anonymization || attrData.anonymizationType || 'unknown',
-                nrBucketsUsed: attrData.nrBuckets ?? attrData.nrBucketsUsed ?? null
-            };
-            attributes.push(attribute);
+        // Extract object type from key (e.g., 'kpiPerson' -> 'Person')
+        let objectType = 'Unknown';
+        if (kpiKey.startsWith('kpi')) {
+            objectType = kpiKey.substring(3) || 'Unknown';
+        }
+
+        // Extract k-anonymity value
+        let kAnonymity = 0;
+        if (kpiEntry['k-Anonymity'] !== undefined) {
+            kAnonymity = typeof kpiEntry['k-Anonymity'] === 'number'
+                ? kpiEntry['k-Anonymity']
+                : parseInt(kpiEntry['k-Anonymity'], 10);
+        }
+
+        // Extract attributes - all other properties except k-Anonymity are attribute KPIs
+        const attributes: AttributeKpi[] = [];
+
+        for (const key of Object.keys(kpiEntry)) {
+            if (key === 'k-Anonymity') {
+                continue; // Skip the k-Anonymity key
+            }
+
+            const attrData = kpiEntry[key];
+            if (attrData && typeof attrData === 'object') {
+                const attribute: AttributeKpi = {
+                    name: key,
+                    displayName: formatAttributeName(key),
+                    anonymizationType: attrData.anonymization || attrData.anonymizationType || 'unknown',
+                    nrBucketsUsed: attrData.nrBuckets ?? attrData.nrBucketsUsed ?? null
+                };
+                attributes.push(attribute);
+            }
+        }
+
+        // Only add if we have meaningful data
+        if (kAnonymity !== 0 || attributes.length > 0) {
+            results.push({
+                objectType,
+                kAnonymity,
+                attributes
+            });
         }
     }
 
-    // If no kAnonymity and no attributes found, return null
-    if (kAnonymity === 0 && attributes.length === 0) {
-        return null;
-    }
-
-    return {
-        kAnonymity,
-        attributes
-    };
+    return results.length > 0 ? results : null;
 }
+
+
 
 /**
  * Filters out meta/KPI data from flat-JSON response and returns only the data array

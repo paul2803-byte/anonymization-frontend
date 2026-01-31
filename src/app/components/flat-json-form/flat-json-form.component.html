@@ -95,7 +95,7 @@
                 Download JSON
             </button>
         </div>
-        <app-kpi-display [kpiData]="kpiData"></app-kpi-display>
+        <app-kpi-display *ngIf="kpiData" [kpiData]="kpiData"></app-kpi-display>
         <pre class="result-output">{{ result }}</pre>
     </div>
 </div>

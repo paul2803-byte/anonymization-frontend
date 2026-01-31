@@ -1,4 +1,4 @@
-<div class="kpi-container" *ngIf="kpiData">
+<div class="kpi-container" *ngIf="hasData()">
     <div class="kpi-header">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -8,25 +8,35 @@
         <h3>Anonymization KPIs</h3>
     </div>
 
-    <div class="kpi-content">
-        <div class="kpi-main">
-            <span class="label">k-Anonymity:</span>
-            <span class="value">{{ kpiData.kAnonymity }}</span>
+    <ng-container *ngFor="let kpi of kpiData; let isFirst = first">
+        <!-- Separator between multiple KPI objects -->
+        <div class="kpi-object-separator" *ngIf="!isFirst"></div>
+
+        <!-- Object type header (only shown when we have multiple objects or a named type) -->
+        <div class="kpi-object-header" *ngIf="hasMultipleObjects() && kpi.objectType">
+            <span class="object-type-label">{{ kpi.objectType }}</span>
         </div>
 
-        <ng-container *ngFor="let attr of kpiData.attributes; let first = first">
-            <div class="kpi-divider"></div>
-            <div class="attribute-group">
-                <span class="attribute-name">{{ attr.displayName }}</span>
-                <div class="attribute-row">
-                    <span class="label">Type:</span>
-                    <span class="value">{{ formatAnonymizationType(attr.anonymizationType) }}</span>
-                </div>
-                <div class="attribute-row" *ngIf="attr.nrBucketsUsed !== null">
-                    <span class="label">Buckets:</span>
-                    <span class="value">{{ attr.nrBucketsUsed }}</span>
-                </div>
+        <div class="kpi-content" [ngClass]="getKpiSeverity(kpi.kAnonymity)">
+            <div class="kpi-main">
+                <span class="label">k-Anonymity:</span>
+                <span class="value">{{ kpi.kAnonymity }}</span>
             </div>
-        </ng-container>
-    </div>
+
+            <ng-container *ngFor="let attr of kpi.attributes; let first = first">
+                <div class="kpi-divider"></div>
+                <div class="attribute-group">
+                    <span class="attribute-name">{{ attr.displayName }}</span>
+                    <div class="attribute-row">
+                        <span class="label">Type:</span>
+                        <span class="value">{{ formatAnonymizationType(attr.anonymizationType) }}</span>
+                    </div>
+                    <div class="attribute-row" *ngIf="attr.nrBucketsUsed !== null">
+                        <span class="label">Buckets:</span>
+                        <span class="value">{{ attr.nrBucketsUsed }}</span>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
 </div>

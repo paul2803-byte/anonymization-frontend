@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AnonymizationService, FlatJsonRequest } from '../../services/anonymization.service';
 import { ConfigUrlInputComponent } from '../config-url-input/config-url-input.component';
 import { KpiDisplayComponent } from '../kpi-display/kpi-display.component';
-import { KpiData, extractFlatJsonKpis, filterFlatJsonData } from '../../utils/kpi-extractor.util';
+import { MultiKpiData, extractAllFlatJsonKpis, filterFlatJsonData } from '../../utils/kpi-extractor.util';
 
 @Component({
   selector: 'app-flat-json-form',
@@ -26,7 +26,7 @@ export class FlatJsonFormComponent {
   isLoading = false;
   error = '';
   result = '';
-  kpiData: KpiData | null = null;
+  kpiData: MultiKpiData[] | null = null;
 
   selectedExample: any = null;
 
@@ -77,6 +77,7 @@ export class FlatJsonFormComponent {
     this.includeOriginalData = false;
     this.useAdjustedAttributes = true;
     this.kpiData = null;
+
     this.selectedExample = null;
     this.result = '';
     this.error = '';
@@ -149,6 +150,7 @@ export class FlatJsonFormComponent {
     this.result = '';
     this.kpiData = null;
 
+
     const request: FlatJsonRequest = {
       configurationUrl: this.configurationUrl,
       prefix: this.prefix,
@@ -162,7 +164,7 @@ export class FlatJsonFormComponent {
       next: (response) => {
         // Extract KPIs if calculateKpi is enabled
         if (this.calculateKpi) {
-          this.kpiData = extractFlatJsonKpis(response);
+          this.kpiData = extractAllFlatJsonKpis(response);
         }
         // Filter and display only the data portion for the result output
         const dataOnly = filterFlatJsonData(response);
