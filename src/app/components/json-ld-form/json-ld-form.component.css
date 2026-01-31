@@ -345,3 +345,147 @@
 .toggle-item.disabled .toggle-switch {
   cursor: not-allowed;
 }
+
+.result-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.turtle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #5bc0de;
+  border: 1px solid #46b8da;
+  border-radius: 4px;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.turtle-btn:hover:not(:disabled) {
+  background-color: #31b0d5;
+  border-color: #269abc;
+}
+
+.turtle-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.turtle-btn span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.turtle-btn svg {
+  flex-shrink: 0;
+}
+
+.turtle-result-container {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.turtle-result-container .result-header {
+  border-bottom-color: #bce8f1;
+}
+
+.turtle-result-container .result-header h3 {
+  color: #31708f;
+}
+
+.turtle-output {
+  background: #f0f8ff;
+  border-color: #bce8f1;
+}
+
+/* Format Toggle Styles */
+.format-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.format-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #999;
+  transition: color 0.2s ease;
+}
+
+.format-label.active {
+  color: #333;
+  font-weight: 600;
+}
+
+.format-toggle-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 0;
+}
+
+.format-toggle-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.format-toggle-switch {
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+  position: relative;
+  background-color: #337ab7;
+  border-radius: 22px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.format-toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.format-toggle-checkbox:checked+.format-toggle-switch {
+  background-color: #5bc0de;
+}
+
+.format-toggle-checkbox:checked+.format-toggle-switch::after {
+  transform: translateX(18px);
+}
+
+.format-toggle-checkbox:disabled+.format-toggle-switch {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.toggle-loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}

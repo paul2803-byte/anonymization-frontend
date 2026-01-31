@@ -1,0 +1,5 @@
+{
+    "customRules": [
+        "When running terminal commands, use Git Bash syntax and invoke commands via 'bash -c \"<command>\"' instead of PowerShell or cmd."
+    ]
+}

@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AnonymizationService, JsonLdRequest } from '../../services/anonymization.service';
 import { ConfigUrlInputComponent } from '../config-url-input/config-url-input.component';
 import { KpiDisplayComponent } from '../kpi-display/kpi-display.component';
-import { KpiData, extractKpis, filterDataEntries } from '../../utils/kpi-extractor.util';
+import { MultiKpiData, extractAllKpis, filterDataEntries } from '../../utils/kpi-extractor.util';
 
 @Component({
   selector: 'app-json-ld-form',
@@ -25,7 +25,15 @@ export class JsonLdFormComponent {
   isLoading = false;
   error = '';
   result = '';
-  kpiData: KpiData | null = null;
+
+  // KPI data extracted from response
+  kpiData: MultiKpiData[] | null = null;
+
+  // Turtle format handling
+  turtleResult = '';
+  turtleError = '';
+  showingTurtleFormat = false;
+  isTurtleLoading = false;
 
   selectedExample: any = null;
 
@@ -139,6 +147,9 @@ export class JsonLdFormComponent {
     this.error = '';
     this.result = '';
     this.kpiData = null;
+    this.turtleResult = '';
+    this.turtleError = '';
+    this.showingTurtleFormat = false;
 
     const request: JsonLdRequest = {
       configurationUrl: this.configurationUrl,
@@ -152,7 +163,7 @@ export class JsonLdFormComponent {
       next: (response) => {
         // Extract KPIs if calculateKpi was enabled
         if (this.calculateKpi) {
-          this.kpiData = extractKpis(response);
+          this.kpiData = extractAllKpis(response);
         }
 
         // Store full response for display and download
@@ -168,12 +179,80 @@ export class JsonLdFormComponent {
   }
 
   downloadResult(): void {
-    const blob = new Blob([this.result], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'anonymization-result.json';
-    link.click();
-    URL.revokeObjectURL(url);
+    if (this.showingTurtleFormat && this.turtleResult) {
+      const blob = new Blob([this.turtleResult], { type: 'text/turtle' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'anonymization-result.ttl';
+      link.click();
+      URL.revokeObjectURL(url);
+    } else {
+      const blob = new Blob([this.result], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'anonymization-result.json';
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  onFormatToggle(): void {
+    // If switching to JSON-LD or turtle is already loaded, no need to fetch again
+    if (!this.showingTurtleFormat || this.turtleResult) {
+      return;
+    }
+
+    // Need to fetch turtle format
+    if (!this.result) {
+      this.turtleError = 'No JSON-LD result available to convert';
+      this.showingTurtleFormat = false;
+      return;
+    }
+
+    this.isTurtleLoading = true;
+    this.turtleError = '';
+
+    let jsonLdData: any;
+    try {
+      jsonLdData = JSON.parse(this.result);
+      // Filter out KPI data to reduce payload size
+      jsonLdData = filterDataEntries(jsonLdData);
+    } catch (e) {
+      this.turtleError = 'Invalid JSON-LD format';
+      this.isTurtleLoading = false;
+      this.showingTurtleFormat = false;
+      return;
+    }
+
+    const canonicalUrl = '/soya-api/canonical';
+
+    this.http.post(canonicalUrl, jsonLdData, {
+      headers: { 'Accept': 'text/turtle', 'Content-Type': 'application/json' },
+      responseType: 'text'
+    }).subscribe({
+      next: (response) => {
+        this.turtleResult = response;
+        this.isTurtleLoading = false;
+      },
+      error: (err) => {
+        if (err.status === 413) {
+          this.turtleError = 'The data is too large to convert to Turtle format. Please try with a smaller dataset.';
+        } else {
+          this.turtleError = err.error?.message || err.message || 'Failed to convert to Turtle format';
+        }
+        this.isTurtleLoading = false;
+        this.showingTurtleFormat = false;
+      }
+    });
+  }
+
+  getDisplayedContent(): string {
+    return this.showingTurtleFormat ? this.turtleResult : this.result;
+  }
+
+  getDownloadButtonText(): string {
+    return this.showingTurtleFormat ? 'Download TTL' : 'Download JSON';
   }
 }
