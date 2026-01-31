@@ -4,5 +4,14 @@
         "secure": false,
         "changeOrigin": true,
         "logLevel": "debug"
+    },
+    "/soya-api": {
+        "target": "https://soya-web-cli.ownyourdata.eu",
+        "secure": false,
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/soya-api": "/api/v1"
+        },
+        "logLevel": "debug"
     }
 }

@@ -81,17 +81,35 @@
     <app-kpi-display *ngIf="kpiData" [kpiData]="kpiData"></app-kpi-display>
 
     <div class="result-header">
-      <h3>Result</h3>
-      <button (click)="downloadResult()" class="download-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-        Download JSON
-      </button>
+      <h3>Result <span *ngIf="showingTurtleFormat" class="format-badge">(Turtle)</span><span
+          *ngIf="!showingTurtleFormat" class="format-badge">(JSON-LD)</span></h3>
+      <div class="result-actions">
+        <div class="format-toggle-wrapper">
+          <span class="format-label" [class.active]="!showingTurtleFormat">JSON-LD</span>
+          <label class="format-toggle-label">
+            <input type="checkbox" [(ngModel)]="showingTurtleFormat" (change)="onFormatToggle()"
+              class="format-toggle-checkbox" [disabled]="isTurtleLoading" />
+            <span class="format-toggle-switch">
+              <span *ngIf="isTurtleLoading" class="toggle-loading-spinner"></span>
+            </span>
+          </label>
+          <span class="format-label" [class.active]="showingTurtleFormat">TTL</span>
+        </div>
+        <button (click)="downloadResult()" class="download-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          {{ getDownloadButtonText() }}
+        </button>
+      </div>
     </div>
-    <pre class="result-output">{{ result }}</pre>
+    <pre class="result-output" [class.turtle-output]="showingTurtleFormat">{{ getDisplayedContent() }}</pre>
+
+    <div *ngIf="turtleError" class="error-message">
+      {{ turtleError }}
+    </div>
   </div>
 </div>
